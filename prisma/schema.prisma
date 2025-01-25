@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id                        Int          @id @default(autoincrement())
+  email                     String       @unique(map: "User_email_key")
+  createdAt                 DateTime     @default(now())
+  password                  String
+  updatedAt                 DateTime
+  accessToken               String?
+  forgotPasswordToken       String?
+  forgotPasswordTokenExpiry DateTime?
+  isAdmin                   Boolean      @default(false)
+  isVerified                Boolean      @default(false)
+  refreshToken              String?
+  verifyToken               String?
+  verifyTokenExpiry         DateTime?
+  userprofile               userprofile?
+}
+
+model userprofile {
+  id                     Int      @id @default(autoincrement())
+  fullName               String
+  contact                String
+  age                    Int
+  gender                 String
+  birthdate              DateTime
+  previousMedicalHistory String?
+  familyHistory          String?
+  addiction              String?
+  address                String?
+  userId                 Int      @unique(map: "UserProfile_userId_key")
+  user                   user     @relation(fields: [userId], references: [id], map: "UserProfile_userId_fkey")
+}
