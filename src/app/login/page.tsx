@@ -134,6 +134,9 @@ const Page = () => {
                                 aria-hidden="true"
                             /> &nbsp; Login with Google
                         </Button>
+                        <span>
+                            <a href="/register">herere</a>
+                        </span>
                     </div>
                 </form>
             </div>

@@ -2,35 +2,37 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
+import { generateTokens } from "@/utils/auth";
+import { z } from "zod";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-const JWT_REFRESH_SECRET =
-    process.env.JWT_REFRESH_SECRET || "your-refresh-secret-key";
-
-const generateTokens = (userId: number) => {
-    if (!userId) {
-        throw new Error("userId is required to generate tokens");
-    }
-
-    const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
-
-    const refreshToken = jwt.sign({ userId }, JWT_REFRESH_SECRET, {
-        expiresIn: "7d",
-    });
-
-    return { accessToken, refreshToken };
-};
+const registerSchema = z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters" }),
+    confirmPassword: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters" }),
+});
 
 export async function POST(req: NextRequest) {
     try {
-        const { email, password, confirmPassword } = await req.json();
-        // console.log(email, password, confirmPassword);
-        if (!email || !password) {
+        const body = await req.json();
+
+        const validation = registerSchema.safeParse(body);
+        if (!validation.success) {
             return NextResponse.json(
-                { error: "Email and password are required" },
+                {
+                    error: validation.error.errors
+                        .map((e) => e.message)
+                        .join(", "),
+                },
                 { status: 400 }
             );
         }
+
+        const { email, password, confirmPassword } = validation.data;
+
         if (password !== confirmPassword) {
             return NextResponse.json(
                 { error: "Passwords do not match" },
@@ -51,7 +53,6 @@ export async function POST(req: NextRequest) {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create the user in the database
         const user = await prisma.user.create({
             data: {
                 email,
@@ -59,12 +60,11 @@ export async function POST(req: NextRequest) {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
-            select:{
-                id : true
-            }
+            select: {
+                id: true,
+            },
         });
-        
-        console.log("usererers", user)
+
         if (!user || !user.id) {
             console.error("User creation failed. User data:", user);
             return NextResponse.json(

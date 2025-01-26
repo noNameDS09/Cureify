@@ -2,37 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
+import { generateTokens } from "@/utils/auth";
+import { z } from "zod";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-const JWT_REFRESH_SECRET =
-    process.env.JWT_REFRESH_SECRET || "your-refresh-secret-key";
-
-
-const generateTokens = (userId: number) => {
-    if (!userId) {
-        throw new Error("userId is required to generate tokens");
-    }
-
-    const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
-
-    const refreshToken = jwt.sign({ userId }, JWT_REFRESH_SECRET, {
-        expiresIn: "7d",
-    });
-
-    return { accessToken, refreshToken };
-};
-
+const loginSchema = z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters" }),
+});
 
 export async function POST(req: NextRequest) {
     try {
-        const { email, password } = await req.json();
+        const body = await req.json();
 
-        if (!email || !password) {
+        const validation = loginSchema.safeParse(body);
+        if (!validation.success) {
             return NextResponse.json(
-                { error: "Email and password are required" },
+                {
+                    error: validation.error.errors
+                        .map((e) => e.message)
+                        .join(", "),
+                },
                 { status: 400 }
             );
         }
+
+        const { email, password } = validation.data;
 
         const user = await prisma.user.findUnique({
             where: { email },
