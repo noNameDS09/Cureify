@@ -60,8 +60,12 @@ const Chatbot = () => {
 
     return (
         <div className="flex flex-col items-center justify-around w-full h-screen bg-blue-50 p-6 -z-20 lg:flex-row">
-          <img src="/svgs/doctor.svg" alt="doctor" className="relative z-10 w-[30rem] left-0"/>
-            <section className="w-full max-w-xl bg-white shadow-xl rounded-lg p-6">
+            <img
+                src="/svgs/doctor.svg"
+                alt="doctor"
+                className="relative z-10 w-[30rem] left-0 scale-x-[-1]"
+            />
+            <section className="w-screen w-4xl bg-white shadow-xl rounded-lg p-6">
                 <header className="flex justify-between items-center pb-4">
                     <div>
                         <h2 className="text-lg font-bold text-blue-800/95">
@@ -123,38 +127,42 @@ const Chatbot = () => {
                             Send
                         </button>
                     </div>
-                    <div className="mt-4 text-zinc-700 h-5">
-                        {isLoading ? (
-                          <span className="text-blue-600">Analysing</span>
-                        ) : "Write a query and click send"}
-                    </div>
-                    <div className="mt-4 flex flex-col items-center">
-                        <Button
-                            variant="outline"
-                            className="flex items-center space-x-2 text-blue-500 border-blue-500"
-                        >
-                            <FaCamera size={20} />
-                            <span>Upload Medical Image</span>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={handleImageUpload}
-                            />
-                        </Button>
-
-                        {image && (
-                            <div className="mt-4 text-blue-800">
-                                <p>Uploaded Image Preview:</p>
-                                <Image
-                                    src={URL.createObjectURL(image)}
-                                    alt="Uploaded Image Preview"
-                                    width={100}
-                                    height={100}
-                                    className="rounded-md"
+                    <div className="flex gap-x-10 justify-center items-center">
+                        <div className="mt-0 text-zinc-700 h-5">
+                            {isLoading ? (
+                                <span className="text-blue-600">Analysing</span>
+                            ) : (
+                                "Write a query and click send"
+                            )}
+                        </div>
+                        <div className="mt-0 flex flex-col items-center">
+                            <Button
+                                variant="outline"
+                                className="flex items-center space-x-2 text-blue-500 border-blue-500"
+                            >
+                                <FaCamera size={20} />
+                                <span>Upload Medical Image</span>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleImageUpload}
                                 />
-                            </div>
-                        )}
+                            </Button>
+
+                            {image && (
+                                <div className="mt-4 text-blue-800">
+                                    <p>Uploaded Image Preview:</p>
+                                    <Image
+                                        src={URL.createObjectURL(image)}
+                                        alt="Uploaded Image Preview"
+                                        width={100}
+                                        height={100}
+                                        className="rounded-md"
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </section>
