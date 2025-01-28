@@ -5,7 +5,6 @@ import { z } from "zod";
 import jwt from "jsonwebtoken";
 import { useId } from "react";
 
-// Define the input schema for updating user profile
 const updateProfileSchema = z.object({
     fullName: z.string().min(1, { message: "Full name is required" }),
     contact: z.string().min(10, { message: "Contact number is required" }),
@@ -20,7 +19,6 @@ const updateProfileSchema = z.object({
 
 export async function PUT(req: NextRequest) {
     try {
-        // Step 1: Extract the token from request cookies or headers
         const token = getTokenFromRequest(req);
         if (!token) {
             return NextResponse.json(
@@ -29,12 +27,11 @@ export async function PUT(req: NextRequest) {
             );
         }
         // console.log(token);
-        // Step 2: Verify the token
         let decodedToken;
         try {
             decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
         } catch (error) {
-            console.error("Error verifying token:", error); // More detailed error logging
+            console.error("Error verifying token:", error);
             return NextResponse.json(
                 { error: "Invalid or expired token" },
                 {
@@ -44,7 +41,6 @@ export async function PUT(req: NextRequest) {
         }
         // console.log(decodedToken);
 
-        // Check if decodedToken is valid
         if (!decodedToken || !decodedToken.userId) {
             console.error("Decoded token is invalid:", decodedToken);
             return NextResponse.json(
@@ -58,7 +54,6 @@ export async function PUT(req: NextRequest) {
         const userId = decodedToken.userId;
         // console.log(userId);
 
-        // Step 3: Parse and validate the request body
         const body = await req.json();
         // console.log(body);
         const validation = updateProfileSchema.safeParse(body);
@@ -85,7 +80,6 @@ export async function PUT(req: NextRequest) {
             address,
         } = validation.data;
 
-        // Step 4: Update the user's profile in the database
         const updatedProfile = await prisma.userprofile.upsert({
             where: { userId },
             update: {
@@ -112,8 +106,7 @@ export async function PUT(req: NextRequest) {
                 address: address,
             },
         });
-        console.log("herehre", updatedProfile)
-        // Step 5: Return the updated profile
+        // console.log("herehre", updatedProfile)
         return NextResponse.json(
             {
                 message: "Profile updated successfully",
@@ -122,7 +115,7 @@ export async function PUT(req: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error updating profile:", error); // More detailed error logging
+        console.error("Error updating profile:", error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

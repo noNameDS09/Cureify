@@ -31,30 +31,29 @@ const Page = () => {
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        // console.log(fields);
         try {
-            const response = await axios.post("/api/users/register", {
-                fields,
-            });
-            console.log(response.data);
+            const response = await axios.post("/api/users/register", fields);
+            
+            console.log(response);
             if (response) {
                 router.push("/login");
             }
         } catch (err) {
-            setError("Registration failed");
+            setError(`Registration failed ${err}`);
             setFields({ email: "", password: "", confirmPassword: "" });
             console.error(err);
         }
     };
 
     useEffect(() => {
-        console.log(fields.email, fields.password, fields.confirmPassword);
+        // console.log(fields.email, fields.password, fields.confirmPassword);
     }, [fields]);
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
-            <div className="w-[25rem] h-[30rem] md:w-[30rem] bg-gray-100/10 shadow-md flex justify-center items-center px-10">
-                <form onSubmit={onSubmit} className="w-full">
+            <div className="w-[25rem] h-[30rem] md:w-[30rem] bg-gray-100/20 shadow-md flex justify-center items-center px-10">
+                <form  className="w-full">
                     <div className="text-center pb-7">
                         <span className="text-3xl font-semibold">Register</span>
                     </div>
@@ -65,7 +64,7 @@ const Page = () => {
                                 <span className="text-destructive">*</span>
                             </Label>
                             <Input
-                                id={id}
+                                id="email"
                                 placeholder="Email"
                                 type="email"
                                 value={fields.email}
@@ -84,7 +83,7 @@ const Page = () => {
                                 <span className="text-destructive">*</span>
                             </Label>
                             <Input
-                                id={id}
+                                id="password"
                                 className="pe-9"
                                 placeholder="Password"
                                 type={isVisible ? "text" : "password"}
@@ -121,7 +120,7 @@ const Page = () => {
                                 <span className="text-destructive">*</span>
                             </Label>
                             <Input
-                                id={id}
+                                id="confirmpassword"
                                 className="pe-9"
                                 placeholder="Confirm password"
                                 type={isVisible2 ? "text" : "password"}
@@ -159,7 +158,8 @@ const Page = () => {
                     <div className="flex justify-center items-center">
                         <button
                             className="mt-5 w-fit px-5 py-[0.3rem] text-center text-foreground rounded-lg transition-colors bg-blue-500/90 hover:bg-blue-600/90"
-                            type="submit"
+                            // type="submit"
+                            onClick={onSubmit}
                         >
                             Submit
                         </button>

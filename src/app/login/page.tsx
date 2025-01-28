@@ -46,8 +46,11 @@ const Page = () => {
     }, [fields]);
 
     return (
-        <div className="flex flex-col justify-center items-center h-screen">
-            <div className="w-[25rem] h-[30rem] md:w-[30rem] bg-gray-100/10 shadow-md flex justify-center items-center px-10">
+        <div className="flex flex-row justify-cneter md:justify-around items-center h-screen w-screen md:px-20 px-5">
+            <div className="absolute -z-10 md:relative">
+                <img src="/svgs/Authentication.svg" alt="authentication" className="size-[35rem]"/>
+            </div>
+            <div className="w-screen h-[30rem] md:w-[30rem] bg-gray-100/30 shadow-md flex justify-center items-center px-10 backdrop-blur-sm z-10">
                 <form onSubmit={onSubmit} className="w-full">
                     <div className="text-center pb-7">
                         <span className="text-3xl font-semibold">Login</span>
@@ -115,13 +118,13 @@ const Page = () => {
                     </div>
                     <div className="flex justify-center items-center">
                         <button
-                            className="mt-5 w-fit px-5 py-[0.3rem] text-center text-foreground rounded-lg transition-colors bg-blue-500/90 hover:bg-blue-600/90"
+                            className="mt-8 w-fit px-5 py-[0.3rem] text-center text-foreground rounded-lg transition-colors bg-blue-400/90 hover:bg-blue-500/90"
                             type="submit"
                         >
                             Login
                         </button>
                     </div>
-                    <div className="flex mt-5 justify-center items-center text-center">
+                    <div className="flex flex-col mt-5 justify-center items-center text-center ">
                         <Button
                             className="w-[20rem]"
                             variant="outline"
@@ -134,8 +137,8 @@ const Page = () => {
                                 aria-hidden="true"
                             /> &nbsp; Login with Google
                         </Button>
-                        <span>
-                            <a href="/register">herere</a>
+                        <span className="mt-3">
+                            <a onClick={() => {router.push("/register")}} className="text-blue-500 text-sm">Don't have account? Register here</a>
                         </span>
                     </div>
                 </form>

@@ -19,7 +19,7 @@ interface UserProfile {
 const ProfilePage = () => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<boolean | null>(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -31,8 +31,8 @@ const ProfilePage = () => {
                 setProfile(response.data);
                 console.log(profile);
             } catch (err) {
-                console.error("Error fetching profile:", err);
-                setError("Failed to load profile. Please try again later.");
+                console.log("Error fetching profile:", err);
+                setError(true)
             } finally {
                 setLoading(false);
             }
@@ -51,8 +51,12 @@ const ProfilePage = () => {
 
     if (error) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <p className="text-red-500">{error}</p>
+            <div className="flex flex-col gap-y-3 justify-center items-center h-screen text-center">
+                <p className="text-red-500">Failed to fetch error. <br /> Make sure you are logged in.</p>
+                
+                <button onClick={() => {router.push("/login")}} className="text-blue-500 underline">
+                    Login 
+                </button>
             </div>
         );
     }
@@ -68,8 +72,11 @@ const ProfilePage = () => {
 
 
     return (
-        <div className="w-[70vw] flex flex-col justify-center items-center  bg-white py-8 mx-auto">
-            <section className="flex flex-col justify-center items-center p-6 w-full bg-gray-50 shadow-md rounded-lg ">
+        <div className="w-[70vw] flex flex-col justify-center items-center  bg-white py-8 mx-auto -z-20">
+            {/* <section className="absolute left-0">
+                <img src="/svgs/personalData.svg" alt="profileImage" className="hidden  md:block md:size-[35rem] lg:size-[45rem]"/>
+            </section> */}
+            <section className="flex flex-col justify-center items-center p-6 w-full bg-gray-100/60 shadow-md rounded-lg backdrop-blur-sm z-10">
                 <header className="w-full text-center pb-6">
                     <h1 className="text-4xl font-bold text-gray-800">
                         Your Profile

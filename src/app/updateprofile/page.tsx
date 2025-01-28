@@ -95,246 +95,262 @@ const ProfileUpdatePage = () => {
     };
 
     return (
+        <div className="w-screen overflow-x-hidden flex justify-around items-center px-4 md:px-20">
+            <div className="w-screen absolute md:w-[30vw] md:relative">
+                <img src="/svgs/profiling.svg" alt="image" className="size-[40rem]" />
+            </div>
+            <div className="w-screen bg-gray-100/50 md:px-10 md:w-[70vw] my-10 py-5 backdrop-blur-sm">
+                <h1 className="text-3xl font-semibold text-center text-gray-900 mb-8 mt-4">
+                    Update Your Profile
+                </h1>
 
-        <div className="w-screen overflow-x-hidden">
-            <img src="/svgs/personalData.svg" alt="image" className="bgimage w-fit size-96 -z-10 absolute rotate-[20deg] md:left-[75vw] lg:left-[70vw] bg-blue-300/0 top-10 hidden md:block" />
-            <div className="max-w-3xl mx-auto p-6 my-10 bg-gray-50/50 rounded-lg shadow-lg backdrop-blur-sm">
-            <h1 className="text-3xl font-semibold text-center text-gray-900 mb-8">
-                Update Your Profile
-            </h1>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Full Name */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="fullName"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Full Name
-                    </Label>
-                    <Input
-                        id="fullName"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter your full name"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Full Name"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Contact */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="contact"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Contact
-                    </Label>
-                    <Input
-                        id="contact"
-                        name="contact"
-                        value={formData.contact}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter your contact number"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Contact"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Age */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="age"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Age
-                    </Label>
-                    <Input
-                        type="number"
-                        id="age"
-                        name="age"
-                        value={formData.age}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter your age"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Age"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Gender */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="gender"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Gender
-                    </Label>
-                    <Input
-                        id="gender"
-                        name="gender"
-                        value={formData.gender}
-                        onChange={handleChange}
-                        required
-                        placeholder="Enter your gender (e.g., Male, Female)"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Gender"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Birthdate */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="birthdate"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Birthdate
-                    </Label>
-                    <Input
-                        type="date"
-                        id="birthdate"
-                        name="birthdate"
-                        value={formData.birthdate}
-                        onChange={handleChange}
-                        required
-                        className="mt-2 p-3 border  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Birthdate"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Previous Medical History */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="previousMedicalHistory"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Previous Medical History
-                    </Label>
-                    <Textarea
-                        id="previousMedicalHistory"
-                        name="previousMedicalHistory"
-                        value={formData.previousMedicalHistory || ""}
-                        onChange={handleChange}
-                        placeholder="Any previous medical history? (Optional)"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Previous Medical History"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Family History */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="familyHistory"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Family History
-                    </Label>
-                    <Textarea
-                        id="familyHistory"
-                        name="familyHistory"
-                        value={formData.familyHistory || ""}
-                        onChange={handleChange}
-                        placeholder="Any family medical history? (Optional)"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Family History"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Addiction */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="addiction"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Addiction
-                    </Label>
-                    <Textarea
-                        id="addiction"
-                        name="addiction"
-                        value={formData.addiction || ""}
-                        onChange={handleChange}
-                        placeholder="Alcohol, Smoking, or None"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Addiction"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {/* Address */}
-                <div className="flex flex-col">
-                    <Label
-                        htmlFor="address"
-                        className="text-sm font-medium text-gray-700"
-                    >
-                        Address
-                    </Label>
-                    <Textarea
-                        id="address"
-                        name="address"
-                        value={formData.address || ""}
-                        onChange={handleChange}
-                        placeholder="Enter your address"
-                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        aria-label="Address"
-                        style={
-                            { "--ring": "234 89% 74%" } as React.CSSProperties
-                        }
-                    />
-                </div>
-
-                {error && (
-                    <div className="text-red-600 text-sm mb-4">{error}</div>
-                )}
-                {successMessage && (
-                    <div className="text-green-600 text-sm mb-4">
-                        {successMessage}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Full Name */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="fullName"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Full Name
+                        </Label>
+                        <Input
+                            id="fullName"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter your full name"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Full Name"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
                     </div>
-                )}
 
-                {/* Submit Button */}
-                <div className="flex flex-col">
-                    <Button
-                        type="submit"
-                        className="w-[15rem] py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mx-auto mt-5 mb-5"
-                    >
-                        {
-                            loading ? (
+                    {/* Contact */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="contact"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Contact
+                        </Label>
+                        <Input
+                            id="contact"
+                            name="contact"
+                            value={formData.contact}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter your contact number"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Contact"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Age */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="age"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Age
+                        </Label>
+                        <Input
+                            type="number"
+                            id="age"
+                            name="age"
+                            value={formData.age}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter your age"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Age"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Gender */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="gender"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Gender
+                        </Label>
+                        <Input
+                            id="gender"
+                            name="gender"
+                            value={formData.gender}
+                            onChange={handleChange}
+                            required
+                            placeholder="Enter your gender (e.g., Male, Female)"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Gender"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Birthdate */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="birthdate"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Birthdate
+                        </Label>
+                        <Input
+                            type="date"
+                            id="birthdate"
+                            name="birthdate"
+                            value={formData.birthdate}
+                            onChange={handleChange}
+                            required
+                            className="mt-2 p-3 border  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Birthdate"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Previous Medical History */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="previousMedicalHistory"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Previous Medical History
+                        </Label>
+                        <Textarea
+                            id="previousMedicalHistory"
+                            name="previousMedicalHistory"
+                            value={formData.previousMedicalHistory || ""}
+                            onChange={handleChange}
+                            placeholder="Any previous medical history? (Optional)"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Previous Medical History"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Family History */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="familyHistory"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Family History
+                        </Label>
+                        <Textarea
+                            id="familyHistory"
+                            name="familyHistory"
+                            value={formData.familyHistory || ""}
+                            onChange={handleChange}
+                            placeholder="Any family medical history? (Optional)"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Family History"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Addiction */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="addiction"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Addiction
+                        </Label>
+                        <Textarea
+                            id="addiction"
+                            name="addiction"
+                            value={formData.addiction || ""}
+                            onChange={handleChange}
+                            placeholder="Alcohol, Smoking, or None"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Addiction"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {/* Address */}
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="address"
+                            className="text-sm font-medium text-gray-700"
+                        >
+                            Address
+                        </Label>
+                        <Textarea
+                            id="address"
+                            name="address"
+                            value={formData.address || ""}
+                            onChange={handleChange}
+                            placeholder="Enter your address"
+                            className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Address"
+                            style={
+                                {
+                                    "--ring": "234 89% 74%",
+                                } as React.CSSProperties
+                            }
+                        />
+                    </div>
+
+                    {error && (
+                        <div className="text-red-600 text-sm mb-4">{error}</div>
+                    )}
+                    {successMessage && (
+                        <div className="text-green-600 text-sm mb-4">
+                            {successMessage}
+                        </div>
+                    )}
+
+                    {/* Submit Button */}
+                    <div className="flex flex-col">
+                        <Button
+                            type="submit"
+                            className="w-[15rem] py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mx-auto mt-5 mb-5"
+                        >
+                            {loading ? (
                                 <div className="loader mx-auto"></div>
                             ) : (
                                 <div className="mx-auto">Update Profile</div>
-                            )
-                        }
-                    </Button>
-                </div>
-                
-            </form>
-        </div>
+                            )}
+                        </Button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
