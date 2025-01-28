@@ -1,276 +1,340 @@
-'use client';
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label"; // Import Label component
-import axios from "axios"; // Import Axios
+"use client";
 
-interface UserProfile {
+import { useState } from "react";
+import axios from "axios";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
+import "@/app/styles.css";
+import { Button } from "react-aria-components";
+
+interface ProfileData {
     fullName: string;
     contact: string;
     age: number;
     gender: string;
     birthdate: string;
-    previousMedicalHistory: any | null;
-    familyHistory: any | null;
-    addiction: any | null;
-    address: any | null;
+    previousMedicalHistory?: string;
+    familyHistory?: string;
+    addiction?: string;
+    address?: string;
 }
 
 const ProfileUpdatePage = () => {
-    const [updatedProfile, setUpdatedProfile] = useState<UserProfile>({
+    const [formData, setFormData] = useState<ProfileData>({
         fullName: "",
         contact: "",
         age: 0,
         gender: "",
         birthdate: "",
-        previousMedicalHistory: null,
-        familyHistory: null,
-        addiction: "none",
-        address: null,
+        previousMedicalHistory: "",
+        familyHistory: "",
+        addiction: "",
+        address: "",
     });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState<boolean | false>(false);
+    const [successMessage, setSuccessMessage] = useState("");
     const router = useRouter();
 
     const handleChange = (
-        e: React.ChangeEvent<
-            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target;
-
-        setUpdatedProfile((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setLoading(true);
+        setError("");
+        setSuccessMessage("");
+
+        const dataToSubmit = {
+            ...formData,
+            age: parseInt(formData.age.toString(), 10),
+        };
 
         try {
-            console.log(updatedProfile)
-            const response = await axios.put("/api/users/updateprofile",updatedProfile)
-            console.log(response.data);
+            setLoading(true);
+            const response = await axios.put(
+                "/api/users/updateprofile",
+                dataToSubmit,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
             if (response.status === 200) {
-                alert("Profile updated successfully!");
-                router.push("/profile"); // Redirect to profile page after successful update
-            } else {
-                alert(`Error: ${response.data.error}`);
+                setSuccessMessage("Profile updated successfully!");
+                router.push("/profile");
             }
-        } catch (error) {
-            console.error("Error updating profile:", error);
-            alert("An error occurred while updating your profile.");
-        } finally {
+        } catch (err) {
             setLoading(false);
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data?.error || "An error occurred");
+            } else {
+                setError("An error occurred");
+            }
+            setFormData({
+                fullName: "",
+                contact: "",
+                age: 0,
+                gender: "",
+                birthdate: "",
+                previousMedicalHistory: "",
+                familyHistory: "",
+                addiction: "",
+                address: "",
+            });
         }
     };
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p className="text-red-500">{error}</p>;
-    }
-
     return (
-        <div className="w-[70vw] flex flex-col justify-center items-center min-h-screen bg-white py-8 mx-auto">
-            <section className="flex flex-col justify-center items-center p-6 w-full bg-gray-50 shadow-md rounded-lg">
-                <header className="w-full text-center pb-6">
-                    <h1 className="text-4xl font-bold text-gray-800">
-                        Update Your Profile
-                    </h1>
-                    <p className="text-gray-600">
-                        Edit your personal and medical information
-                    </p>
-                </header>
 
-                <form onSubmit={handleSubmit} className="w-full space-y-6">
-                    <div className="flex flex-col gap-6">
-                        <section className="flex-1 flex flex-col gap-4">
-                            <h2 className="font-semibold text-gray-700">
-                                Personal Information
-                            </h2>
-                            <div className="space-y-3">
-                                <div>
-                                    <Label
-                                        htmlFor="fullName"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Full Name
-                                    </Label>
-                                    <input
-                                        type="text"
-                                        id="fullName"
-                                        name="fullName"
-                                        value={updatedProfile.fullName}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label
-                                        htmlFor="contact"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Contact
-                                    </Label>
-                                    <input
-                                        type="text"
-                                        id="contact"
-                                        name="contact"
-                                        value={updatedProfile.contact}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label
-                                        htmlFor="age"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Age
-                                    </Label>
-                                    <input
-                                        type="number"
-                                        id="age"
-                                        name="age"
-                                        value={updatedProfile.age}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label
-                                        htmlFor="gender"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Gender
-                                    </Label>
-                                    <input
-                                        type="text"
-                                        id="gender"
-                                        name="gender"
-                                        value={updatedProfile.gender}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="birthdate"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Birthdate
-                                    </label>
-                                    <input
-                                        type="date"
-                                        id="birthdate"
-                                        name="birthdate"
-                                        value={updatedProfile.birthdate}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                        </section>
+        <div className="w-screen overflow-x-hidden">
+            <img src="/svgs/personalData.svg" alt="image" className="bgimage w-fit size-96 -z-10 absolute rotate-[20deg] md:left-[75vw] lg:left-[70vw] bg-blue-300/0 top-10 hidden md:block" />
+            <div className="max-w-3xl mx-auto p-6 my-10 bg-gray-50/50 rounded-lg shadow-lg backdrop-blur-sm">
+            <h1 className="text-3xl font-semibold text-center text-gray-900 mb-8">
+                Update Your Profile
+            </h1>
 
-                        <section className="flex-1 flex flex-col gap-4">
-                            <h2 className="font-semibold text-gray-700">
-                                Medical Information
-                            </h2>
-                            <div className="space-y-3">
-                                <div>
-                                    <Label
-                                        htmlFor="previousMedicalHistory"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Previous Medical History
-                                    </Label>
-                                    <textarea
-                                        id="previousMedicalHistory"
-                                        name="previousMedicalHistory"
-                                        value={updatedProfile.previousMedicalHistory || ""}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                    />
-                                </div>
-                                <div>
-                                    <Label
-                                        htmlFor="familyHistory"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Family History
-                                    </Label>
-                                    <textarea
-                                        id="familyHistory"
-                                        name="familyHistory"
-                                        value={updatedProfile.familyHistory || ""}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                    />
-                                </div>
-                                <div>
-                                    <Label
-                                        htmlFor="addiction"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Addiction
-                                    </Label>
-                                    <select
-                                        id="addiction"
-                                        name="addiction"
-                                        value={updatedProfile.addiction}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                    >
-                                        <option value="none">None</option>
-                                        <option value="smoking">Smoking</option>
-                                        <option value="alcohol">Alcohol</option>
-                                        <option value="smoking and alcohol">
-                                            Smoking and Alcohol
-                                        </option>
-                                    </select>
-                                </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Full Name */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="fullName"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Full Name
+                    </Label>
+                    <Input
+                        id="fullName"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter your full name"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Full Name"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
 
-                                <div>
-                                    <Label
-                                        htmlFor="address"
-                                        className="font-medium text-gray-600"
-                                    >
-                                        Address
-                                    </Label>
-                                    <textarea
-                                        id="address"
-                                        name="address"
-                                        value={updatedProfile.address || ""}
-                                        onChange={handleChange}
-                                        className="w-full py-2 px-4 border rounded bg-gray-50"
-                                    />
-                                </div>
-                            </div>
-                        </section>
+                {/* Contact */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="contact"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Contact
+                    </Label>
+                    <Input
+                        id="contact"
+                        name="contact"
+                        value={formData.contact}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter your contact number"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Contact"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Age */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="age"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Age
+                    </Label>
+                    <Input
+                        type="number"
+                        id="age"
+                        name="age"
+                        value={formData.age}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter your age"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Age"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Gender */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="gender"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Gender
+                    </Label>
+                    <Input
+                        id="gender"
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter your gender (e.g., Male, Female)"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Gender"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Birthdate */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="birthdate"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Birthdate
+                    </Label>
+                    <Input
+                        type="date"
+                        id="birthdate"
+                        name="birthdate"
+                        value={formData.birthdate}
+                        onChange={handleChange}
+                        required
+                        className="mt-2 p-3 border  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Birthdate"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Previous Medical History */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="previousMedicalHistory"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Previous Medical History
+                    </Label>
+                    <Textarea
+                        id="previousMedicalHistory"
+                        name="previousMedicalHistory"
+                        value={formData.previousMedicalHistory || ""}
+                        onChange={handleChange}
+                        placeholder="Any previous medical history? (Optional)"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Previous Medical History"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Family History */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="familyHistory"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Family History
+                    </Label>
+                    <Textarea
+                        id="familyHistory"
+                        name="familyHistory"
+                        value={formData.familyHistory || ""}
+                        onChange={handleChange}
+                        placeholder="Any family medical history? (Optional)"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Family History"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Addiction */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="addiction"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Addiction
+                    </Label>
+                    <Textarea
+                        id="addiction"
+                        name="addiction"
+                        value={formData.addiction || ""}
+                        onChange={handleChange}
+                        placeholder="Alcohol, Smoking, or None"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Addiction"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {/* Address */}
+                <div className="flex flex-col">
+                    <Label
+                        htmlFor="address"
+                        className="text-sm font-medium text-gray-700"
+                    >
+                        Address
+                    </Label>
+                    <Textarea
+                        id="address"
+                        name="address"
+                        value={formData.address || ""}
+                        onChange={handleChange}
+                        placeholder="Enter your address"
+                        className="mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Address"
+                        style={
+                            { "--ring": "234 89% 74%" } as React.CSSProperties
+                        }
+                    />
+                </div>
+
+                {error && (
+                    <div className="text-red-600 text-sm mb-4">{error}</div>
+                )}
+                {successMessage && (
+                    <div className="text-green-600 text-sm mb-4">
+                        {successMessage}
                     </div>
+                )}
 
-                    <footer className="w-full text-center pt-6">
-                        <button
-                            type="submit"
-                            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                        >
-                            Update Profile
-                        </button>
-                    </footer>
-                </form>
-            </section>
+                {/* Submit Button */}
+                <div className="flex flex-col">
+                    <Button
+                        type="submit"
+                        className="w-[15rem] py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mx-auto mt-5 mb-5"
+                    >
+                        {
+                            loading ? (
+                                <div className="loader mx-auto"></div>
+                            ) : (
+                                <div className="mx-auto">Update Profile</div>
+                            )
+                        }
+                    </Button>
+                </div>
+                
+            </form>
+        </div>
         </div>
     );
 };

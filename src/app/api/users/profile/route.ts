@@ -5,7 +5,7 @@ import { getTokenFromRequest, verifyToken } from "@/utils/auth";
 export async function GET(req: NextRequest) {
   try {
     const token = getTokenFromRequest(req);
-console.log()
+// console.log()
     if (!token) {
       return NextResponse.json({ error: "Authorization token not found" }, { status: 401 });
     }
