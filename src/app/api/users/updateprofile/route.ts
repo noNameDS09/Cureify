@@ -5,6 +5,7 @@ import { z } from "zod";
 import jwt from "jsonwebtoken";
 import { useId } from "react";
 
+
 const updateProfileSchema = z.object({
     fullName: z.string().min(1, { message: "Full name is required" }),
     contact: z.string().min(10, { message: "Contact number is required" }),

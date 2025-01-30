@@ -7,6 +7,7 @@ import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RiGoogleFill } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
+import { doLogin } from "@/app/actions";
 
 interface Fields {
     email: string;
@@ -34,7 +35,7 @@ const Page = () => {
         // console.log(fields);
         try {
             const response = await axios.post("/api/users/register", fields);
-            
+
             console.log(response);
             if (response) {
                 router.push("/login");
@@ -52,8 +53,8 @@ const Page = () => {
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
-            <div className="w-[25rem] h-[30rem] md:w-[30rem] bg-gray-100/20 shadow-md flex justify-center items-center px-10">
-                <form  className="w-full">
+            <div className="w-[25rem] h-[30rem] md:w-[30rem] bg-gray-100/20 shadow-md flex flex-col justify-center items-center px-10">
+                <form className="w-full">
                     <div className="text-center pb-7">
                         <span className="text-3xl font-semibold">Register</span>
                     </div>
@@ -164,12 +165,17 @@ const Page = () => {
                             Submit
                         </button>
                     </div>
+                </form>
+                <form action={doLogin}>
                     <div className="flex mt-5 justify-center items-center text-center">
                         <Button
                             className="w-[20rem]"
                             variant="outline"
                             aria-label="Login with Google"
                             size="icon"
+                            name="action"
+                            type="submit"
+                            value={`google`}
                         >
                             <RiGoogleFill
                                 className="text-[#db5037] dark:text-primary"

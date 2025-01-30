@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
         const { email, password } = validation.data;
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user1.findUnique({
             where: { email },
         });
 
