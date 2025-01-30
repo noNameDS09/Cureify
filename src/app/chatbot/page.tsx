@@ -122,7 +122,11 @@ const Chatbot = () => {
                         />
                         <button
                             onClick={handleSubmitText}
-                            className="bg-blue-500 text-white rounded-lg px-4 py-2"
+                            className={`bg-blue-500 text-white rounded-lg px-4 py-2 ${
+                                isLoading
+                                    ? "cursor-not-allowed"
+                                    : "cursor-pointer"
+                            }`}
                         >
                             Send
                         </button>
