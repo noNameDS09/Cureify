@@ -20,7 +20,8 @@ const updateProfileSchema = z.object({
 
 export async function PUT(req: NextRequest) {
     try {
-        const token = getTokenFromRequest(req);
+        const token:string = getTokenFromRequest(req);
+        // console.log(token)
         if (!token) {
             return NextResponse.json(
                 { error: "Unauthorized - No access token found" },
@@ -52,8 +53,8 @@ export async function PUT(req: NextRequest) {
             );
         }
 
-        const userId = decodedToken.userId;
-        // console.log(userId);
+        const userId:number = decodedToken.userId;
+        // console.log(decodedToken);
 
         const body = await req.json();
         // console.log(body);
@@ -68,7 +69,7 @@ export async function PUT(req: NextRequest) {
                 { status: 400 }
             );
         }
-
+        // console.log(validation)
         const {
             fullName,
             contact,
@@ -80,45 +81,55 @@ export async function PUT(req: NextRequest) {
             addiction,
             address,
         } = validation.data;
-
-        const updatedProfile = await prisma.userprofile.upsert({
-            where: { userId },
-            update: {
-                fullName: fullName,
-                contact: contact,
-                age: age,
-                gender: gender,
-                birthdate: new Date(birthdate),
-                previousMedicalHistory: previousMedicalHistory,
-                familyHistory: familyHistory,
-                addiction: addiction,
-                address: address,
-            },
-            create: {
-                userId: userId,
-                fullName: fullName,
-                contact: contact,
-                age: age,
-                gender: gender,
-                birthdate: new Date(birthdate),
-                previousMedicalHistory: previousMedicalHistory,
-                familyHistory: familyHistory,
-                addiction: addiction,
-                address: address,
-            },
-        });
-        // console.log("herehre", updatedProfile)
-        return NextResponse.json(
-            {
-                message: "Profile updated successfully",
-                profile: updatedProfile,
-            },
-            { status: 200 }
-        );
+// console.log(typeof(userId))
+        try {
+            // console.log("trying")
+            const updatedProfile = await prisma.userprofile.upsert({
+                where: { userId },  // Ensure userId is an Int
+                update: {
+                    fullName: fullName,
+                    contact: contact,
+                    age: age,
+                    gender: gender,
+                    birthdate: new Date(birthdate),
+                    previousMedicalHistory: previousMedicalHistory,
+                    familyHistory: familyHistory,
+                    addiction: addiction,
+                    address: address,
+                },
+                create: {
+                    userId: userId,  // Ensure userId is an Int
+                    fullName: fullName,
+                    contact: contact,
+                    age: age,
+                    gender: gender,
+                    birthdate: new Date(birthdate),
+                    previousMedicalHistory: previousMedicalHistory,
+                    familyHistory: familyHistory,
+                    addiction: addiction,
+                    address: address,
+                },
+            });
+            
+            // console.log("herehre", updatedProfile)
+            return NextResponse.json(
+                {
+                    message: "Profile updated successfully",
+                    profile: updatedProfile,
+                },
+                { status: 200 }
+            );
+        } catch (error) {
+            return NextResponse.json({
+                error : error
+            }, {status:500})
+        }
     } catch (error) {
         console.error("Error updating profile:", error);
         return NextResponse.json(
-            { error: "Internal server error" },
+            { error: "Internal server error", 
+                // error : error
+             },
             { status: 500 }
         );
     }

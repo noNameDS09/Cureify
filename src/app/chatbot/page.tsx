@@ -65,7 +65,7 @@ const Chatbot = () => {
                 alt="doctor"
                 className="relative z-10 w-[30rem] left-0 scale-x-[-1]"
             />
-            <section className="w-screen w-4xl bg-white shadow-xl rounded-lg p-6">
+            <section className="w-screen w-4xl bg-white shadow-xl rounded-lg p-6 ">
                 <header className="flex justify-between items-center pb-4">
                     <div>
                         <h2 className="text-lg font-bold text-blue-800/95">

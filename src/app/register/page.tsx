@@ -169,13 +169,14 @@ const Page = () => {
                 <form action={doLogin}>
                     <div className="flex mt-5 justify-center items-center text-center">
                         <Button
-                            className="w-[20rem]"
+                            className="w-[20rem] cursor-not-allowed"
                             variant="outline"
                             aria-label="Login with Google"
                             size="icon"
                             name="action"
                             type="submit"
                             value={`google`}
+                            disabled
                         >
                             <RiGoogleFill
                                 className="text-[#db5037] dark:text-primary"

@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        // console.log(hashedPassword)
         const user = await prisma.user1.create({
             data: {
                 email,
@@ -64,7 +64,8 @@ export async function POST(req: NextRequest) {
                 id: true,
             },
         });
-        console.log(user);
+        // console.log("JHEHEEHE")
+        // console.log(user);
         if (!user || !user.id) {
             console.error("User creation failed. User data:", user);
             return NextResponse.json(
@@ -73,9 +74,10 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const { accessToken, refreshToken } = generateTokens(user.id);
-
-        await prisma.user.update({
+        const { accessToken, refreshToken } = await generateTokens(Number(user.id));
+        // console.log(accessToken)
+        // console.log(refreshToken)
+        await prisma.user1.update({
             where: { id: user.id },
             data: {
                 accessToken,

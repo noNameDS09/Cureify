@@ -17,7 +17,7 @@ export const verifyToken = (token: string) => {
 export const getTokenFromRequest = (req: Request) => {
   const cookies = req.cookies;
   const token = cookies.get("access_token")?.value;
-
+  // console.log(req.cookies)
   if (!token) {
     const authHeader = req.headers.get("Authorization");
     if (authHeader && authHeader.startsWith("Bearer ")) {
@@ -29,14 +29,14 @@ export const getTokenFromRequest = (req: Request) => {
 };
 
 
-export const generateTokens = (userId: number) => {
+export const generateTokens = async (userId: number) => {
     if (!userId) {
         throw new Error("userId is required to generate tokens");
     }
 
-    const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
+    const accessToken = await jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
 
-    const refreshToken = jwt.sign({ userId }, JWT_REFRESH_SECRET, {
+    const refreshToken = await jwt.sign({ userId }, JWT_REFRESH_SECRET, {
         expiresIn: "7d",
     });
 

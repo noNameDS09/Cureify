@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        const { accessToken, refreshToken } = generateTokens(user.id);
+        const { accessToken, refreshToken } = await generateTokens(user.id);
 
         const response = NextResponse.json(
             { message: "User logged in successfully" },

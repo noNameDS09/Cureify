@@ -15,5 +15,20 @@ export const {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
     ],
+    session: {
+        strategy: "database",
+    },
+    callbacks: {
+        async jwt({token, account}){
+            if(account){
+                token.accessToken = account.access_token
+            }
+            return token;
+        },
+        async session({ session, user }) {
+          session.user.id = user.id;
+          return session;
+        },
+      },
     // database:
 });

@@ -87,16 +87,7 @@ const ProfilePage = () => {
             {/* <section className="absolute left-0">
                 <img src="/svgs/personalData.svg" alt="profileImage" className="hidden  md:block md:size-[35rem] lg:size-[45rem]"/>
             </section> */}
-            <div className="bg-black">
-                <form action={doLogout}>
-                <button 
-                type="submit"
-                >
-                    Logout
-                </button>
-
-                </form>
-            </div>
+            
             <section className="flex flex-col justify-center items-center p-6 w-full bg-gray-100/60 shadow-md rounded-lg backdrop-blur-sm z-10">
                 <header className="w-full text-center pb-6">
                     <h1 className="text-4xl font-bold text-gray-800">
@@ -236,6 +227,16 @@ const ProfilePage = () => {
                     </button>
                 </footer>
             </section>
+            <div className="bg-white">
+                <form action={doLogout}>
+                <button 
+                type="submit"
+                >
+                    Logout
+                </button>
+
+                </form>
+            </div>
         </div>
     );
 };

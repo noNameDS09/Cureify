@@ -25,7 +25,7 @@ model user1 {
 }
 
 model userprofile {
-  id                     Int      @id @default(autoincrement())
+  id                     String          @id @default(cuid())
   fullName               String
   contact                String
   age                    Int
@@ -35,8 +35,10 @@ model userprofile {
   familyHistory          String?
   addiction              String?
   address                String?
-  userId                 Int      @unique(map: "UserProfile_userId_key")
-  user                   user1     @relation(fields: [userId], references: [id], map: "UserProfile_userId_fkey")
+  userId                 Int?     @unique(map: "UserProfile_userId_key")
+  user1                  user1?   @relation(fields: [userId], references: [id], map: "UserProfile_userId_fkey")
+  userId2                String?  @unique(map: "UserProfile_userId_user_key")
+  user                   User?    @relation(fields: [userId2], references: [id], map: "UserProfile_userId2_user_fkey")
 }
 
 model User {
@@ -48,16 +50,15 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  userprofile   userprofile?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
- 
+
 model Account {
   id                       String  @id @default(cuid())
-  userId                   String  @unique
+  userId                   String  // Change from Int to String
   type                     String
   provider                 String
   providerAccountId        String
@@ -70,47 +71,46 @@ model Account {
   session_state            String?
   refresh_token_expires_in Int?
   user                     User?   @relation(fields: [userId], references: [id])
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   @@unique([provider, providerAccountId])
   @@index([userId])
 }
- 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
+  userId       String   // Change from Int to String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id])
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   @@index([userId])
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
 }
- 
-// Optional for WebAuthn support
+
 model Authenticator {
   credentialID         String  @unique
-  userId               String
+  userId               String  // Change from Int to String
   providerAccountId    String
   credentialPublicKey  String
   counter              Int
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }

@@ -46,10 +46,11 @@ const Page = () => {
     }, [fields]);
 
     return (
-        <div className="flex flex-row justify-cneter md:justify-around items-center h-screen w-screen md:px-20 px-5">
+        <div className="absolute flex flex-row justify-cneter md:justify-around items-center h-screen w-screen md:px-40 px-5">
             <div className="absolute -z-10 md:relative">
                 <img src="/svgs/Authentication.svg" alt="authentication" className="size-[35rem]"/>
             </div>
+            <span className="w-[80vh] absolute hidden md:block h-[1px] bg-zinc-400 rotate-90 rounded-full" />
             <div className="w-screen h-[30rem] md:w-[30rem] bg-gray-100/30 shadow-md flex justify-center items-center px-10 backdrop-blur-sm z-10">
                 <form onSubmit={onSubmit} className="w-full">
                     <div className="text-center pb-7">
@@ -126,10 +127,11 @@ const Page = () => {
                     </div>
                     <div className="flex flex-col mt-5 justify-center items-center text-center ">
                         <Button
-                            className="w-[20rem]"
+                            className="w-[20rem] cursor-not-allowed"
                             variant="outline"
                             aria-label="Login with Google"
                             size="icon"
+                            disabled
                         >
                             <RiGoogleFill
                                 className="text-[#db5037] dark:text-primary"

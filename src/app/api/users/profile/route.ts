@@ -6,15 +6,20 @@ export async function GET(req: NextRequest) {
     try {
         const token = getTokenFromRequest(req);
         // console.log()
+        console.log(token)
+
+
         if (!token) {
+            console.log("NOT TOKEN")
             return NextResponse.json(
                 { error: "Authorization token not found" },
                 { status: 401 }
             );
         }
-
+        // console.log("JLJLJ")
+        // console.log(token)
         const userId = verifyToken(token);
-
+        // console.log(userId)
         if (!userId) {
             return NextResponse.json(
                 { error: "Invalid token" },

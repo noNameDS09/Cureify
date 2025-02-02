@@ -20,7 +20,7 @@ CREATE TABLE `user1` (
 
 -- CreateTable
 CREATE TABLE `userprofile` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` VARCHAR(191) NOT NULL,
     `fullName` VARCHAR(191) NOT NULL,
     `contact` VARCHAR(191) NOT NULL,
     `age` INTEGER NOT NULL,
@@ -31,8 +31,10 @@ CREATE TABLE `userprofile` (
     `addiction` VARCHAR(191) NULL,
     `address` VARCHAR(191) NULL,
     `userId` INTEGER NOT NULL,
+    `userId2` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `UserProfile_userId_key`(`userId`),
+    UNIQUE INDEX `UserProfile_userId_user_key`(`userId2`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -70,7 +72,6 @@ CREATE TABLE `Account` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `Account_userId_key`(`userId`),
     INDEX `Account_userId_idx`(`userId`),
     UNIQUE INDEX `Account_provider_providerAccountId_key`(`provider`, `providerAccountId`),
     PRIMARY KEY (`id`)
@@ -116,6 +117,9 @@ CREATE TABLE `Authenticator` (
 
 -- AddForeignKey
 ALTER TABLE `userprofile` ADD CONSTRAINT `UserProfile_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user1`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `userprofile` ADD CONSTRAINT `UserProfile_userId_user_fkey` FOREIGN KEY (`userId2`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
