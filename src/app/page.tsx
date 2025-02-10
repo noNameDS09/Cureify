@@ -1,25 +1,25 @@
-import LoginForm from '@/components/LoginForm'
-import React from 'react'
-import { auth } from '@/auth'
-import Image from 'next/image';
-import Form from '@/components/UploadFile';
+import React from "react";
+import { auth } from "@/auth";
+import Hero from "@/components/Hero";
+import CostumerFeedback from "@/components/CostumerFeedback";
 
 const page = async () => {
-  const session = await auth();
-  
+    const session = await auth();
 
-  return (
-    <div>
-        {session && (
+    return (
+        <div>
+            {/* {session && (
           <>
           <div>{session.user?.name}</div>
           <Image src={session.user?.image} alt='profile image' width={72} height={72} className='rounded-full' />
           </>
         )}
       <LoginForm />
-      <Form />    
-    </div>
-  )
-}
+      <Form />     */}
+            <Hero />
+            <CostumerFeedback />
+        </div>
+    );
+};
 
 export default page;
