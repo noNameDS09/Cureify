@@ -2,9 +2,11 @@ import LoginForm from '@/components/LoginForm'
 import React from 'react'
 import { auth } from '@/auth'
 import Image from 'next/image';
+import Form from '@/components/UploadFile';
 
 const page = async () => {
   const session = await auth();
+  
 
   return (
     <div>
@@ -15,8 +17,9 @@ const page = async () => {
           </>
         )}
       <LoginForm />
+      <Form />    
     </div>
   )
 }
 
-export default page
+export default page;

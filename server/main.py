@@ -11,4 +11,4 @@ def mainAgent(prompt, img=None):
     #     return ouptut
 
 
-print(mainAgent("This is the img", 'tempimg.png'))
+# print(mainAgent("This is the img", 'tempimg.png'))

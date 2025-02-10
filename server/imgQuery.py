@@ -2,7 +2,12 @@ import PIL.Image
 import os
 import google.generativeai as genai
 
-genai.configure(api_key='AIzaSyDtB4bETfNDyvpzA_NnBKMrr56rdiOE8bQ')
+from dotenv import load_dotenv
+import os
+load_dotenv()
+api_key_ = os.getenv('API_KEY')
+
+genai.configure(api_key=api_key_)
 
 def imgQuery(img, prompt):
     sample_file_1 = PIL.Image.open(img)

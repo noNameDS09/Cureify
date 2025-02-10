@@ -4,6 +4,14 @@ from imageAgent import imgClassifier
 from query import queryAnalysis
 from symptoms import retrieve_and_answer
 
+
+from dotenv import load_dotenv
+import os
+load_dotenv()
+api_key_ = os.getenv('API_KEY')
+
+
+
 def routerAgent(img, prompt):
     base = '''From the given prompt, you have to find out which task do we have to perform, if it's an image, 
     we'll have to perform disease identification for that respond image. If it's a disease symptom related then output 
@@ -13,7 +21,7 @@ def routerAgent(img, prompt):
     Agent = ChatGoogleGenerativeAI(
         model='gemini-1.5-flash',
         temperature=0,
-        api_key='AIzaSyDtB4bETfNDyvpzA_NnBKMrr56rdiOE8bQ',
+        api_key=api_key_,
         max_tokens=None,
         timeout=30,
         max_retries=2
@@ -42,9 +50,4 @@ def routerAgent(img, prompt):
     #     while (result!='done' or result!='DONE'):
     #         result = retrieve_and_answer(prompt, chatHistory)
     else:
-        return 'Invalid prompt.'
-
-
-
-
-
+        return output

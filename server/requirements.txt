@@ -5,5 +5,5 @@ langchain-google-genai==2.0.9
 langchain-core==0.3.34
 faiss-cpu==1.10.0
 sentence-transformers==3.4.1
-pickle5==0.0.12
+# pickle5
 numpy==2.2.2

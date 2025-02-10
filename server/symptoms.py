@@ -7,6 +7,13 @@ from langchain_core.messages import HumanMessage
 import pickle
 import os
 
+
+
+from dotenv import load_dotenv
+# import os
+load_dotenv()
+api_key_ = os.getenv('API_KEY')
+
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def load_vector_db(index_path="faiss_index.idx", chunks_file="text_chunks.pkl"):
@@ -25,7 +32,7 @@ def answer_generation(input, chatHistory):
     llm = ChatGoogleGenerativeAI(
         model='gemini-1.5-flash',
         temperature=0,
-        api_key='AIzaSyDtB4bETfNDyvpzA_NnBKMrr56rdiOE8bQ',
+        api_key=api_key_,
         max_tokens=None,
         timeout=30,
         max_retries=2

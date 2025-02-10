@@ -2,7 +2,12 @@ import PIL.Image
 import google.generativeai as genai
 from query import queryAnalysis
 
-genai.configure(api_key='AIzaSyDtB4bETfNDyvpzA_NnBKMrr56rdiOE8bQ')
+from dotenv import load_dotenv
+import os
+load_dotenv()
+api_key_ = os.getenv('API_KEY')
+
+genai.configure(api_key=api_key_)
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
 def OCR(img, prompt):
