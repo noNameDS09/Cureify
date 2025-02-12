@@ -18,6 +18,7 @@ const page = async () => {
       <Form />     */}
             <Hero />
             <CostumerFeedback />
+            
         </div>
     );
 };

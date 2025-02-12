@@ -38,9 +38,10 @@ def process():
     img = request.files.get("img")
 
     # Print the prompt and image file information
-    print(f"Prompt: {prompt}")
+    # print(f"Prompt: {prompt}")
     if img:
-        print(f"Image received: {img.filename}")
+        # print(f"Image received: {img.filename}")
+        pass
     else:
         print("No image received")
 

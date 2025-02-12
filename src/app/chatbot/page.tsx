@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { FaCamera } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const Chatbot = () => {
@@ -11,12 +10,17 @@ const Chatbot = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
+    // Function to format messages with *italic* and **bold**
+    const formatMessage = (text: string) => {
+        return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\*(.*?)\*/g, "<em>$1</em>");
+    };
+
     const handleSubmitText = async () => {
         if (userInput.trim() || image) {
-            setMessages([
-                ...messages,
+            setMessages((prevMessages) => [
+                ...prevMessages,
                 { sender: "user", text: userInput || "Image uploaded" },
-                { sender: "bot", text: "Analyzing your query..." },
+                { sender: "bot", text: "" },  // Skeleton loader
             ]);
             setUserInput("");
             setIsLoading(true);
@@ -43,12 +47,12 @@ const Chatbot = () => {
 
                 setIsLoading(false);
                 setMessages((prevMessages) => [
-                    ...prevMessages,
+                    ...prevMessages.slice(0, prevMessages.length - 1),  // Remove the skeleton loader
                     {
                         sender: "bot",
-                        text:
-                            data.result ||
-                            "Here is the analysis for your query: ...",
+                        text: formatMessage(
+                            data.result || "Here is the analysis for your query: ..."
+                        ),
                     },
                 ]);
             } catch (err) {
@@ -63,10 +67,10 @@ const Chatbot = () => {
         const file = e.target.files?.[0];
         if (file) {
             setImage(file);
-            setMessages([
+            setMessages([ 
                 ...messages,
                 { sender: "user", text: "Image uploaded" },
-                { sender: "bot", text: "Image uploded successfully" },
+                { sender: "bot", text: "Image uploaded successfully" },
             ]);
         }
     };
@@ -94,87 +98,41 @@ const Chatbot = () => {
                     {messages.map((msg, idx) => (
                         <div
                             key={idx}
-                            className={`flex ${
-                                msg.sender === "user"
-                                    ? "justify-end"
-                                    : "justify-start"
-                            }`}
+                            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                         >
                             <div
                                 className={`rounded-lg p-3 py-1 max-w-[80%] ${
-                                    msg.sender === "user"
-                                        ? "bg-neutral-400 text-white"
-                                        : "bg-gray-200"
+                                    msg.sender === "user" ? "bg-neutral-400 text-white" : "bg-gray-200"
                                 }`}
                             >
-                                {msg.sender === "user" ? (
-                                    <p className="text-right">{msg.text}</p>
-                                ) : (
-                                    <p className="text-left w-full">
-                                        {msg.text}
-                                    </p>
-                                )}
+                                <p
+                                    className={`${msg.sender === "user" ? "text-right" : "text-left"}`}
+                                    dangerouslySetInnerHTML={{
+                                        __html: formatMessage(msg.text),
+                                    }}
+                                />
                             </div>
                         </div>
                     ))}
+
+                    {/* Show skeleton loader while the bot is loading */}
+                    {isLoading && (
+                        <div className="flex justify-start">
+                            <div className="rounded-lg p-3 py-1 max-w-[80%] bg-gray-200 h-[40px] animate-pulse w-[70%]">
+                                <div className="space-y-4">
+                                    {[...Array(1)].map((_, idx) => (
+                                        <div key={idx} className="flex space-x-2 items-center ">
+                                            {/* <div className="w-[70%] h-[40px] bg-gray-300 animate-pulse rounded-md"></div>
+                                            <div className="w-[25%] h-[40px] bg-gray-300 animate-pulse rounded-md"></div> */}
+                                            Analyzing...
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* 
-        <div className="flex flex-col items-center space-y-4 mt-4">
-          <div className="flex space-x-4 w-full">
-            <input
-              type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Ask something..."
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-            />
-            <button
-              onClick={handleSubmitText}
-              className={`bg-blue-500 text-white rounded-lg px-4 py-2 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-            >
-              Send
-            </button>
-          </div>
-          <div className="flex gap-x-10 justify-center items-center">
-            <div className="mt-0 text-zinc-700 h-5">
-              {isLoading ? (
-                <span className="text-blue-600">Analysing</span>
-              ) : (
-                'Write a query and click send'
-              )}
-            </div>
-            <div className="mt-0 flex flex-col items-center">
-              <div className="text-zinc-700 flex justify-center items-center">
-              <FaCamera size={20} className='text-blue-500'/>
-                <label htmlFor="file-upload" className="cursor-pointer text-blue-500">
-                   Upload Medical Image
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="mt-2"
-                />
-              </div>
-
-              {image && (
-                <div className="mt-4 text-blue-800">
-                  <p>Uploaded Image Preview:</p>
-                  <Image
-                    src={URL.createObjectURL(image)}
-                    alt="Uploaded Image Preview"
-                    width={100}
-                    height={100}
-                    className="rounded-md"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
- */}
                 <div className="flex flex-col items-center mt-4 space-y-0">
                     <div className="flex w-full space-x-4">
                         <input
@@ -187,9 +145,7 @@ const Chatbot = () => {
                         <button
                             onClick={handleSubmitText}
                             className={`bg-blue-500 text-white rounded-lg px-4 py-2 ${
-                                isLoading
-                                    ? "cursor-not-allowed"
-                                    : "cursor-pointer"
+                                isLoading ? "cursor-not-allowed" : "cursor-pointer"
                             }`}
                         >
                             Send
@@ -199,9 +155,7 @@ const Chatbot = () => {
                     <div className="flex justify-center items-center gap-x-10">
                         <div className="text-zinc-700">
                             {isLoading ? (
-                                <span className="text-blue-600">
-                                    Analysing...
-                                </span>
+                                <span className="text-blue-600">Analysing...</span>
                             ) : (
                                 "Write a query and click send"
                             )}

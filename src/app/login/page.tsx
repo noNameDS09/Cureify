@@ -48,7 +48,11 @@ const Page = () => {
     return (
         <div className="absolute flex flex-row justify-cneter md:justify-around items-center h-screen w-screen md:px-40 px-5">
             <div className="absolute -z-10 md:relative">
-                <img src="/svgs/Authentication.svg" alt="authentication" className="size-[35rem]"/>
+                <img
+                    src="/svgs/Authentication.svg"
+                    alt="authentication"
+                    className="size-[35rem]"
+                />
             </div>
             <span className="w-[80vh] absolute hidden md:block h-[1px] bg-zinc-400 rotate-90 rounded-full" />
             <div className="w-screen h-[30rem] md:w-[30rem] bg-gray-100/30 shadow-md flex justify-center items-center px-10 backdrop-blur-sm z-10">
@@ -137,10 +141,20 @@ const Page = () => {
                                 className="text-[#db5037] dark:text-primary"
                                 size={20}
                                 aria-hidden="true"
-                            /> &nbsp; Login with Google
+                            />{" "}
+                            &nbsp; Login with Google
                         </Button>
-                        <span className="mt-3">
-                            <a onClick={() => {router.push("/register")}} className="text-blue-500 text-sm">Don't have account? Register here</a>
+                        <span className="mt-3 text-sm">
+                            Don't have account?
+                            <a
+                                onClick={() => {
+                                    router.push("/register");
+                                }}
+                                className="text-blue-500 text-sm hover:cursor-pointer"
+                            >
+                                {" "}
+                                Register here
+                            </a>
                         </span>
                     </div>
                 </form>
