@@ -1,16 +1,14 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from imageAgent import imgClassifier
-from query import queryAnalysis
-from symptoms import retrieve_and_answer
-
 
 from dotenv import load_dotenv
 import os
 load_dotenv()
 api_key_ = os.getenv('API_KEY')
 
-
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from imageAgent import imgClassifier
+from query import queryAnalysis
+from symptoms import retrieve_and_answer
 
 def routerAgent(img, prompt):
     base = '''From the given prompt, you have to find out which task do we have to perform, if it's an image, 
@@ -42,12 +40,11 @@ def routerAgent(img, prompt):
     if img:
         imgAnalysis = imgClassifier(img, prompt)
         return imgAnalysis
-    elif 'query' in output:
+    elif 'query' in output or  'QUERY' in output:
         queryOutput = queryAnalysis(prompt)
         return queryOutput
-    # elif 'symptom' in output:
-    #     result = retrieve_and_answer(prompt, chatHistory)
-    #     while (result!='done' or result!='DONE'):
-    #         result = retrieve_and_answer(prompt, chatHistory)
+    elif 'symptom' in output or 'SYMPTOMS'in output:
+        result = retrieve_and_answer(prompt, chatHistory=[])
+        return result
     else:
-        return output
+        return 'Invalid prompt.'

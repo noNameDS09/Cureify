@@ -9,6 +9,7 @@ const Chatbot = () => {
     const [image, setImage] = useState<File | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    const [chat, setChat] = useState<any[]>([]);
 
     // Function to format messages with *italic* and **bold**
     const formatMessage = (text: string) => {
@@ -16,50 +17,43 @@ const Chatbot = () => {
     };
 
     const handleSubmitText = async () => {
-        if (userInput.trim() || image) {
+        if (!userInput.trim() && !image) return; // Prevent empty submission
+
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            { sender: "user", text: userInput || "Image uploaded" },
+            { sender: "bot", text: "" },  // Skeleton loader
+        ]);
+
+        setChat((prevChat) => [...prevChat, userInput]);
+        setUserInput(""); // Clear user input field
+        setIsLoading(true);
+
+        const formData = new FormData();
+        if (userInput.trim()) formData.append("prompt", userInput);
+        if (image) formData.append("img", image);
+
+        try {
+            const response = await fetch("http://localhost:5001/process", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) throw new Error("Failed to process the request");
+
+            const data = await response.json();
+            setIsLoading(false);
+
             setMessages((prevMessages) => [
-                ...prevMessages,
-                { sender: "user", text: userInput || "Image uploaded" },
-                { sender: "bot", text: "" },  // Skeleton loader
+                ...prevMessages.slice(0, prevMessages.length - 1),  // Remove the skeleton loader
+                { sender: "bot", text: formatMessage(data.result || "Here is the analysis for your query: ...") },
             ]);
-            setUserInput("");
-            setIsLoading(true);
+            setImage(null); // Clear image after submission
 
-            const formData = new FormData();
-            if (userInput.trim()) {
-                formData.append("prompt", userInput);
-            }
-            if (image) {
-                formData.append("img", image);
-            }
-
-            try {
-                const response = await fetch("http://localhost:5001/process", {
-                    method: "POST",
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to process the request");
-                }
-
-                const data = await response.json();
-
-                setIsLoading(false);
-                setMessages((prevMessages) => [
-                    ...prevMessages.slice(0, prevMessages.length - 1),  // Remove the skeleton loader
-                    {
-                        sender: "bot",
-                        text: formatMessage(
-                            data.result || "Here is the analysis for your query: ..."
-                        ),
-                    },
-                ]);
-            } catch (err) {
-                console.error("Error during fetch:", err);
-                setIsLoading(false);
-                setError("An error occurred while processing the request");
-            }
+        } catch (err) {
+            console.error("Error during fetch:", err);
+            setIsLoading(false);
+            setError("An error occurred while processing the request");
         }
     };
 
@@ -67,7 +61,7 @@ const Chatbot = () => {
         const file = e.target.files?.[0];
         if (file) {
             setImage(file);
-            setMessages([ 
+            setMessages([
                 ...messages,
                 { sender: "user", text: "Image uploaded" },
                 { sender: "bot", text: "Image uploaded successfully" },
@@ -76,7 +70,7 @@ const Chatbot = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-around w-full h-screen bg-blue-50 p-6 -z-20 lg:flex-row">
+        <div className="flex flex-col items-center justify-around w-full h-screen bg-blue-50 p-6 lg:flex-row">
             <img
                 src="/svgs/doctor.svg"
                 alt="doctor"
@@ -85,48 +79,27 @@ const Chatbot = () => {
             <section className="w-screen w-4xl bg-white shadow-xl rounded-lg p-6">
                 <header className="flex justify-between items-center pb-4">
                     <div>
-                        <h2 className="text-lg font-bold text-blue-800/95">
-                            Medical Chatbot
-                        </h2>
-                        <p className="text-sm text-gray-600">
-                            Your personal medical assistant
-                        </p>
+                        <h2 className="text-lg font-bold text-blue-800/95">Medical Chatbot</h2>
+                        <p className="text-sm text-gray-600">Your personal medical assistant</p>
                     </div>
                 </header>
 
-                <div className="h-[30rem] overflow-auto bg-gray-100 p-4 rounded-lg space-y-4 scroll_">
+                <div className="h-[30rem] overflow-auto bg-gray-100 p-4 rounded-lg space-y-4">
                     {messages.map((msg, idx) => (
-                        <div
-                            key={idx}
-                            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                        >
+                        <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                             <div
-                                className={`rounded-lg p-3 py-1 max-w-[80%] ${
-                                    msg.sender === "user" ? "bg-neutral-400 text-white" : "bg-gray-200"
-                                }`}
+                                className={`rounded-lg p-3 py-1 max-w-[80%] ${msg.sender === "user" ? "bg-neutral-400 text-white" : "bg-gray-200"}`}
                             >
-                                <p
-                                    className={`${msg.sender === "user" ? "text-right" : "text-left"}`}
-                                    dangerouslySetInnerHTML={{
-                                        __html: formatMessage(msg.text),
-                                    }}
-                                />
+                                <p className={`${msg.sender === "user" ? "text-right" : "text-left"}`} dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
                             </div>
                         </div>
                     ))}
 
-                    {/* Show skeleton loader while the bot is loading */}
                     {isLoading && (
                         <div className="flex justify-start">
                             <div className="rounded-lg p-3 py-1 max-w-[80%] bg-gray-200 h-[40px] animate-pulse w-[70%]">
                                 <div className="space-y-4">
-                                    {[...Array(1)].map((_, idx) => (
-                                        <div key={idx} className="flex space-x-2 items-center ">
-                                            {/* <div className="w-[70%] h-[40px] bg-gray-300 animate-pulse rounded-md"></div>
-                                            <div className="w-[25%] h-[40px] bg-gray-300 animate-pulse rounded-md"></div> */}
-                                            Analyzing...
-                                        </div>
-                                    ))}
+                                    <div className="flex space-x-2 items-center">Analyzing...</div>
                                 </div>
                             </div>
                         </div>
@@ -144,9 +117,7 @@ const Chatbot = () => {
                         />
                         <button
                             onClick={handleSubmitText}
-                            className={`bg-blue-500 text-white rounded-lg px-4 py-2 ${
-                                isLoading ? "cursor-not-allowed" : "cursor-pointer"
-                            }`}
+                            className={`bg-blue-500 text-white rounded-lg px-4 py-2 ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
                         >
                             Send
                         </button>
@@ -154,19 +125,12 @@ const Chatbot = () => {
 
                     <div className="flex justify-center items-center gap-x-10">
                         <div className="text-zinc-700">
-                            {isLoading ? (
-                                <span className="text-blue-600">Analysing...</span>
-                            ) : (
-                                "Write a query and click send"
-                            )}
+                            {isLoading ? <span className="text-blue-600">Analyzing...</span> : "Write a query and click send"}
                         </div>
 
                         <div className="flex flex-col items-center mt-0">
-                            <label
-                                htmlFor="file-upload"
-                                className="cursor-pointer text-blue-500"
-                            >
-                                <FaCamera size={20} className="text-blue-500" />
+                            <label htmlFor="file-upload" className="cursor-pointer text-blue-500">
+                                <FaCamera size={20} />
                             </label>
                             <input
                                 id="file-upload"

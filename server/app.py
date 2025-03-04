@@ -36,6 +36,7 @@ def process():
     # Get the form data (prompt) and file (img) from the request
     prompt = request.form.get("prompt")
     img = request.files.get("img")
+    chat = request.form.get("chat")
 
     # Print the prompt and image file information
     # print(f"Prompt: {prompt}")
