@@ -17,7 +17,7 @@ const page = async () => {
       <LoginForm />
       <Form />     */}
             <Hero />
-            <CostumerFeedback />
+            {/* <CostumerFeedback /> */}
             
         </div>
     );
