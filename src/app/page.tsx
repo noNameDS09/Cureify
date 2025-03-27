@@ -2,6 +2,7 @@ import React from "react";
 import { auth } from "@/auth";
 import Hero from "@/components/Hero";
 import CostumerFeedback from "@/components/CostumerFeedback";
+import FeaturesSection from "@/components/FeatureSection";
 
 const page = async () => {
     const session = await auth();
@@ -17,7 +18,8 @@ const page = async () => {
       <LoginForm />
       <Form />     */}
             <Hero />
-            {/* <CostumerFeedback /> */}
+            <FeaturesSection />
+            <CostumerFeedback />
             
         </div>
     );

@@ -1,11 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
 
 export function CustomerFeedbackScrolling() {
     return (
         <div className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+            {/* Heading Section */}
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+                What Our Customers Are Saying
+            </h2>
+            
+            {/* Infinite Moving Cards Component */}
             <InfiniteMovingCards
                 items={testimonials}
                 direction="right"
@@ -17,28 +23,28 @@ export function CustomerFeedbackScrolling() {
 
 const testimonials = [
     {
-        quote: "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
-        name: "Charles Dickens",
-        title: "A Tale of Two Cities",
+        quote: "Cureify has completely changed how I approach my health. The AI-driven insights helped me take proactive steps toward improving my wellness, and the chat interface made it so easy to use!",
+        name: "Jane Doe",
+        title: "Satisfied Customer",
     },
     {
-        quote: "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
-        name: "William Shakespeare",
-        title: "Hamlet",
+        quote: "I love how Cureify gives personalized health recommendations based on my unique data. It’s like having a personal health assistant at my fingertips, available whenever I need it!",
+        name: "John Smith",
+        title: "Long-Time User",
     },
     {
-        quote: "All that we see or seem is but a dream within a dream.",
-        name: "Edgar Allan Poe",
-        title: "A Dream Within a Dream",
+        quote: "The real-time medical assistance and symptom checker have been a lifesaver for me. I can quickly get medical information and feel confident about my health choices.",
+        name: "Emily Johnson",
+        title: "Health Enthusiast",
     },
     {
-        quote: "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-        name: "Jane Austen",
-        title: "Pride and Prejudice",
+        quote: "I’ve been using Cureify for a few months now, and I’m impressed with how well it adapts to my health needs. It even provided tips on improving my fitness routine!",
+        name: "Michael Davis",
+        title: "Fitness Focused",
     },
     {
-        quote: "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
-        name: "Herman Melville",
-        title: "Moby-Dick",
+        quote: "Cureify’s integration of AI and medical knowledge is a game-changer. I can trust the information I get and make informed decisions about my health every day.",
+        name: "Sarah Lee",
+        title: "Healthcare Advocate",
     },
 ];

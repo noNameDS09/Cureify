@@ -46,7 +46,7 @@ const Page = () => {
     }, [fields]);
 
     return (
-        <div className="absolute flex flex-row justify-cneter md:justify-around items-center h-screen w-screen md:px-40 px-5">
+        <div className="relative flex flex-row justify-cneter md:justify-around items-center h-screen w-screen md:px-40 px-5">
             <div className="absolute -z-10 md:relative">
                 <img
                     src="/svgs/Authentication.svg"

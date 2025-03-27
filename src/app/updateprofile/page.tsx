@@ -95,8 +95,8 @@ const ProfileUpdatePage = () => {
     };
 
     return (
-        <div className="w-screen overflow-x-hidden flex justify-around items-center px-4 md:px-20">
-            <div className="w-screen absolute md:w-[30vw] md:relative">
+        <div className="w-screen overflow-x-hidden flex justify-around items-center px-4 md:px-20 pt-10">
+            <div className="w-screen absolute md:w-[60vw] ml-56 md:absolute">
                 <img src="/svgs/profiling.svg" alt="image" className="size-[40rem]" />
             </div>
             <div className="w-screen bg-gray-100/50 md:px-10 md:w-[70vw] my-10 py-5 backdrop-blur-sm">
