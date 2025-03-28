@@ -20,7 +20,7 @@ const LogoutPage = () => {
                     console.log("User logged out successfully");
                     setTimeout(()=>{
                         router.push("/");
-                    }, 1000);
+                    }, 500);
                 } else {
                     console.error("Logout failed");
                 }

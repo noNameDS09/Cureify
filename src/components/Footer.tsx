@@ -1,9 +1,17 @@
+"use client";
+
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  weight : "400",
+  subsets: ['latin'],
+});
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-blue-500 to-indigo-700 text-white py-10">
+    <footer className={`${poppins.className} bg-gradient-to-r from-blue-500 to-indigo-700 text-white py-10`}>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
           {/* Left Side - Logo and Description */}

@@ -2,12 +2,22 @@
 
 import React from "react";
 import { InfiniteMovingCards } from "./ui/infinite-moving-cards";
+import { Poppins, Roboto } from "next/font/google";
+
+const roboto = Roboto({
+    weight : "400",
+    subsets: ["latin"],
+});
+const poppins = Poppins({
+    weight: "400",
+    subsets: ["latin-ext"],
+});
 
 export function CustomerFeedbackScrolling() {
     return (
-        <div className="h-[40rem] rounded-md flex flex-col antialiased bg-white dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
+        <div className="h-[40rem] rounded-md flex flex-col antialiased bg-blue-100 dark:bg-black dark:bg-grid-white/[0.05] items-center justify-center relative overflow-hidden">
             {/* Heading Section */}
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+            <h2 className={`${poppins.className} text-2xl font-semibold text-gray-800 dark:text-white mb-6`}>
                 What Our Customers Are Saying
             </h2>
             

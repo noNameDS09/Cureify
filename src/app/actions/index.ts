@@ -8,5 +8,5 @@ export async function doLogin(formData:any) {
 }
 
 export async function doLogout() {
-    await signOut({redirectTo: "/chatbot"});
+    await signOut({redirectTo: "/"});
 }

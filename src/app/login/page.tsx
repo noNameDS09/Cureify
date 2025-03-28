@@ -32,7 +32,7 @@ const Page = () => {
             const response = await axios.post("/api/users/login", fields);
             console.log(response.data);
             if (response) {
-                router.push("/");
+                router.refresh();
             }
         } catch (err) {
             setError("Login failed");
@@ -42,7 +42,7 @@ const Page = () => {
     };
 
     useEffect(() => {
-        console.log(fields.email, fields.password);
+        // console.log(fields.email, fields.password);
     }, [fields]);
 
     return (

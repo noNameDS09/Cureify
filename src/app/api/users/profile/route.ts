@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
             familyHistory: user.userprofile?.familyHistory,
             addiction: user.userprofile?.addiction,
             address: user.userprofile?.address,
-        });
+        }, {status: 200});
     } catch (error) {
         console.error("Error fetching profile:", error);
         return NextResponse.json(
