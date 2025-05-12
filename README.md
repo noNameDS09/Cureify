@@ -71,3 +71,6 @@ The AI system can instantly access and provide up-to-date medical knowledge, dru
    ```bash
    npm run dev
    ```
+
+#### In this there is folder called server, which is python flask server you need to install necessary dependancies (requirements.txt)
+   ### You also need to setup the Google Gemini-api for python server
